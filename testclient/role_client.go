@@ -5,14 +5,15 @@ import (
 	"honeycomb-server-client/constant"
 	"honeycomb-server-client/serialize"
 	"honeycomb-server-client/tools"
+	"honeycomb/model/global"
 	"honeycomb/model/returns"
 	"io/ioutil"
 	"net/url"
 )
 
 func HttpPostFormRoleLogin(userID string, roleID string, userType string, HardwareID string) string {
-	resp, err := tools.HoneycombPostForm(constant.Address+"/role/login",
-		url.Values{"userid": {userID}, "roleid": {roleID}, "userType": {userType}, "hwid": {HardwareID}})
+	resp, err := tools.HoneycombPostForm(constant.HoneycombAddress+"/role/login",
+		url.Values{"userid": {userID}, "roleid": {roleID}, "usertype": {userType}, "hwid": {HardwareID}})
 
 	if err != nil {
 		panic(err)
@@ -25,6 +26,14 @@ func HttpPostFormRoleLogin(userID string, roleID string, userType string, Hardwa
 
 	loginReturn := new(returns.LoginReturn)
 	result := serialize.JSONDeserialize(loginReturn, string(body))
-	fmt.Println(roleID, result)
+	fmt.Println(roleID, result.(*returns.LoginReturn).UserType)
+	switch result.(*returns.LoginReturn).UserType {
+	case global.USER_TYPE_SUPER, global.USER_TYPE_ADMIN:
+		fmt.Println(result.(*returns.LoginReturn).AdminInstance)
+	case global.USER_TYPE_BEEKEEPER:
+		fmt.Println(result.(*returns.LoginReturn).BeekeeperInstance)
+	case global.USER_TYPE_CONSUMER:
+		fmt.Println(result.(*returns.LoginReturn).ConsumerInstance)
+	}
 	return string(body)
 }

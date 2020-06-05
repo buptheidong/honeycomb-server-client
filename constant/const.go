@@ -1,6 +1,6 @@
 package constant
 
 const (
-	//Address = "http://china-honeycomb-program.com:9001" //account
-	Address = "http://china-honeycomb-program.com:9112" //honeycomb
+	AccountAddress = "https://china-honeycomb-program.com:9000" //account
+	HoneycombAddress = "https://china-honeycomb-program.com:9111" //honeycomb
 )
