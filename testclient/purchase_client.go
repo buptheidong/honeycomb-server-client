@@ -12,7 +12,7 @@ import (
 
 func HttpPostFormSubmitPurchase(roleID, purchaseID, name, desc, purchaseType, contentType, place, adjustModulus string) string {
 	resp, err := tools.HoneycombPostForm(constant.HoneycombAddress+"/purchase/submit",
-		url.Values{"roleid": {roleID}, "purchaseid": {purchaseID}, "name": {name}, "desc": {desc}, "purchasetype": {purchaseType}, "contenttype": {contentType}, "place": {place}, "adjustmodulus": {adjustModulus}})
+		url.Values{"roleid": {roleID}, "purchaseid": {purchaseID}, "name": {name}, "desc": {desc}, "purchaseType": {purchaseType}, "contentType": {contentType}, "place": {place}, "adjustModulus": {adjustModulus}})
 
 	if err != nil {
 		panic(err)
@@ -36,7 +36,7 @@ func HttpPostFormSubmitPurchase(roleID, purchaseID, name, desc, purchaseType, co
 
 func HttpPostFormGetPurchase(roleID, startTime, endTime string) string {
 	resp, err := tools.HoneycombPostForm(constant.HoneycombAddress+"/purchase/get",
-		url.Values{"roleid": {roleID}, "starttime": {startTime}, "endtime": {endTime}})
+		url.Values{"roleid": {roleID}, "startTime": {startTime}, "endTime": {endTime}})
 
 	if err != nil {
 		panic(err)

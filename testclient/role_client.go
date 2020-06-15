@@ -13,7 +13,7 @@ import (
 
 func HttpPostFormRoleLogin(userID string, roleID string, userType string) string {
 	resp, err := tools.HoneycombPostForm(constant.HoneycombAddress+"/role/login",
-		url.Values{"userid": {userID}, "roleid": {roleID}, "usertype": {userType}})
+		url.Values{"userid": {userID}, "roleid": {roleID}, "userType": {userType}})
 
 	if err != nil {
 		panic(err)
