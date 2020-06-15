@@ -11,9 +11,9 @@ import (
 	"net/url"
 )
 
-func HttpPostFormRoleLogin(userID string, roleID string, userType string, HardwareID string) string {
+func HttpPostFormRoleLogin(userID string, roleID string, userType string) string {
 	resp, err := tools.HoneycombPostForm(constant.HoneycombAddress+"/role/login",
-		url.Values{"userid": {userID}, "roleid": {roleID}, "usertype": {userType}, "hwid": {HardwareID}})
+		url.Values{"userid": {userID}, "roleid": {roleID}, "usertype": {userType}})
 
 	if err != nil {
 		panic(err)
@@ -26,7 +26,7 @@ func HttpPostFormRoleLogin(userID string, roleID string, userType string, Hardwa
 
 	loginReturn := new(returns.LoginReturn)
 	result := serialize.JSONDeserialize(loginReturn, string(body))
-	fmt.Println(roleID, result.(*returns.LoginReturn).UserType)
+	fmt.Println(roleID, result.(*returns.LoginReturn).ErrCode+result.(*returns.LoginReturn).ErrMsg)
 	switch result.(*returns.LoginReturn).UserType {
 	case global.USER_TYPE_SUPER, global.USER_TYPE_ADMIN:
 		fmt.Println(result.(*returns.LoginReturn).AdminInstance)

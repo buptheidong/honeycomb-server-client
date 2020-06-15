@@ -12,7 +12,7 @@ import (
 
 func HttpPostFormSubmitPurchase(roleID, purchaseID, name, desc, purchaseType, contentType, place, adjustModulus string) string {
 	resp, err := tools.HoneycombPostForm(constant.HoneycombAddress+"/purchase/submit",
-		url.Values{"roleid": {roleID}, "purchaseid": {purchaseID}, "name": {name}, "desc": {desc}, "purchaseType": {purchaseType}, "contentType": {contentType}, "place": {place}, "adjustModulus": {adjustModulus}})
+		url.Values{"roleid": {roleID}, "purchaseid": {purchaseID}, "name": {name}, "desc": {desc}, "purchasetype": {purchaseType}, "contenttype": {contentType}, "place": {place}, "adjustmodulus": {adjustModulus}})
 
 	if err != nil {
 		panic(err)
@@ -25,6 +25,35 @@ func HttpPostFormSubmitPurchase(roleID, purchaseID, name, desc, purchaseType, co
 
 	purchaseReturn := new(returns.PurchaseReturn)
 	result := serialize.JSONDeserialize(purchaseReturn, string(body))
-	fmt.Println(result.(*returns.PurchaseReturn))
+	fmt.Println(roleID, result.(*returns.PurchaseReturn).ErrCode+result.(*returns.PurchaseReturn).ErrMsg)
+	for key, purchases := range result.(*returns.PurchaseReturn).Purchases {
+		for index, purchase := range purchases {
+			fmt.Println(key, index, purchase)
+		}
+	}
+	return string(body)
+}
+
+func HttpPostFormGetPurchase(roleID, startTime, endTime string) string {
+	resp, err := tools.HoneycombPostForm(constant.HoneycombAddress+"/purchase/get",
+		url.Values{"roleid": {roleID}, "starttime": {startTime}, "endtime": {endTime}})
+
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		panic(err)
+	}
+
+	purchaseReturn := new(returns.PurchaseReturn)
+	result := serialize.JSONDeserialize(purchaseReturn, string(body))
+	fmt.Println(roleID, result.(*returns.PurchaseReturn).ErrCode+result.(*returns.PurchaseReturn).ErrMsg)
+	for key, purchases := range result.(*returns.PurchaseReturn).Purchases {
+		for index, purchase := range purchases {
+			fmt.Println(key, index, purchase)
+		}
+	}
 	return string(body)
 }

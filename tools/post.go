@@ -2,6 +2,7 @@ package tools
 
 import (
 	"crypto/md5"
+	"crypto/tls"
 	"fmt"
 	"log"
 	"net/http"
@@ -14,6 +15,7 @@ const (
 	AccountMD5KEY = "cKdG41L6HLzsDJFDF!@#210392l;k12hUNh"
 	HoneycombKey  = "ASBA@e1h2e982eFlk123e09193j"        //作为debug或工具使用的md5 key
 	DebugSign     = "KKD&(@#324j12087:LJF)2332j4j209Lf0" //作为以debug模式发协议的特征字符串
+	hardwareID    = "hardwareID"
 )
 
 func AccountPostForm(address string, forms url.Values) (*http.Response, error) {
@@ -23,7 +25,7 @@ func AccountPostForm(address string, forms url.Values) (*http.Response, error) {
 	log.Println(sign, content)
 	forms.Add("sign", sign)
 	forms.Add("time", time)
-	return http.PostForm(address, forms)
+	return generateHttpsClient().PostForm(address, forms)
 }
 
 func HoneycombPostForm(address string, forms url.Values) (*http.Response, error) {
@@ -34,5 +36,18 @@ func HoneycombPostForm(address string, forms url.Values) (*http.Response, error)
 	forms.Add("sign", sign)
 	forms.Add("time", time)
 	forms.Add("debug", DebugSign)
-	return http.PostForm(address, forms)
+	forms.Add("hwid", hardwareID)
+	return generateHttpsClient().PostForm(address, forms)
+}
+
+func generateHttpsClient() *http.Client {
+	//跳过证书验证
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+	httpClient := &http.Client{
+		Timeout:   5 * time.Second,
+		Transport: transport,
+	}
+	return httpClient
 }
