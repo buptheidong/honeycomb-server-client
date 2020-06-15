@@ -11,7 +11,7 @@ import (
 )
 
 func HttpPostFormGetRecordHoneycomb(roleID, operatorUid, targetUid, recordType, startTime, endTime string) string {
-	resp, err := tools.HoneycombPostForm(constant.HoneycombAddress+"/purchase/get",
+	resp, err := tools.HoneycombPostForm(constant.HoneycombAddress+"/record/get",
 		url.Values{"roleid": {roleID}, "operatorUid": {operatorUid}, "targetUid": {targetUid}, "type": {recordType}, "startTime": {startTime}, "endTime": {endTime}})
 
 	if err != nil {
